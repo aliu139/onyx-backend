@@ -63,10 +63,13 @@ router.get('/directions/:start/:end', function(req,res,next){
     request(url, function(error, response, body){
         var data = JSON.parse(body).routes[0].legs[0].steps;
 
+        var i = 1;
+
         for(var step in data){
             var long = data[step].end_location.lng;
             var lat = data[step].end_location.lat;
-            var name= "WAYPOINT";
+            var name= "WAYPOINT" + i.toString();
+            i = i+1;
 
             output.push({'Name': name, 'Lat': lat, 'Lon': long});
         }
