@@ -7,8 +7,11 @@
 // This application uses express as its web server
 // for more info, see: http://expressjs.com
 var express = require('express');
-var priceline = require('./public/routes/priceline.js');
 var request = require('request');
+
+var priceline = require('./public/routes/priceline.js');
+var googleMaps = require('./public/routes/maps.js');
+var cornell = require('./public/routes/cornell.js');
 
 // cfenv provides access to your Cloud Foundry environment
 // for more info, see: https://www.npmjs.com/package/cfenv
@@ -18,6 +21,8 @@ var cfenv = require('cfenv');
 var app = express();
 
 app.use('/priceline', priceline);
+app.use('/gmaps', googleMaps);
+app.use('/cornell', cornell);
 
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
