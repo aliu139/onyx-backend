@@ -3,10 +3,11 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 
+var apiKey = "AIzaSyBKeZCRS8E9tvFg2bgQ4-f21KWcrxHVSy4";
+
 /* GET users listing. */
 router.get('/hospital/:loc', function(req, res, next) {
     var currentLoc=req.params.loc;
-    var apiKey = "AIzaSyBKeZCRS8E9tvFg2bgQ4-f21KWcrxHVSy4";
 
     var url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+currentLoc+"&radius=500&types=hospital&key="+apiKey;
     var output = [];
@@ -27,5 +28,26 @@ router.get('/hospital/:loc', function(req, res, next) {
         //console.log(body);
     });
 });
+
+router.get('/search/:query', function(req,res, next){
+    var query = req.params.query;
+    var output = [];
+
+    var url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+query+"&key="+apiKey;
+
+    request(url, function(error, response, body){
+        var data = JSON.parse(body).results;
+
+        for(var results in data){
+            var long = data[results].geometry.location.lng;
+            var lat = data[results].geometry.location.lat;
+            var name = data[results].name;
+
+            output.push({'Name': name, 'Lat': lat, 'Lon': long});
+        }
+
+        res.send(output);
+    })
+})
 
 module.exports = router;
