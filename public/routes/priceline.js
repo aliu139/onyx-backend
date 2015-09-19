@@ -4,8 +4,20 @@ var router = express.Router();
 var request = require('request');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-    var url = "http://www.priceline.com/api/hotelretail/listing/v3/miami,fl/20151025/20151027/1/50?offset=0";
+router.get('/:loc', function(req, res, next) {
+    var currentLoc=req.params.loc;
+    var year = new Date().getFullYear();
+    var day = new Date().getDay();
+    var nextDay = (day+1)%30;
+    var month = new Date().getMonth();
+
+    var dateString;
+    var nextDateString;
+
+    dateString = year.toString()+"0"+month.toString() + day.toString();
+    nextDateString = year.toString()+"0"+month.toString() + nextDay.toString();
+
+    var url = "http://www.priceline.com/api/hotelretail/listing/v3/"+currentLoc+"/"+dateString+"/"+nextDateString+"/1/50?offset=0";
     var output = [];
 
     request(url, function(error, response, body) {
