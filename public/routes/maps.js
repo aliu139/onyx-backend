@@ -48,6 +48,31 @@ router.get('/search/:query', function(req,res, next){
 
         res.send(output);
     })
-})
+});
+
+router.get('/directions/:start/:end', function(req,res,next){
+    var start = req.params.start;
+    var end =req.params.end;
+
+    var output = [];
+
+    var url = "https://maps.googleapis.com/maps/api/directions/json?origin="+start+"&destination="+end+"&avoid=highways&mode=walking&key="+apiKey;
+
+    console.log(url);
+
+    request(url, function(error, response, body){
+        var data = JSON.parse(body).routes[0].legs[0].steps;
+
+        for(var step in data){
+            var long = data[step].end_location.lng;
+            var lat = data[step].end_location.lat;
+            var name= "WAYPOINT";
+
+            output.push({'Name': name, 'Lat': lat, 'Lon': long});
+        }
+
+        res.send(output);
+    })
+});
 
 module.exports = router;
