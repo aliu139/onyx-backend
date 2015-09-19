@@ -4,21 +4,21 @@ var router = express.Router();
 var request = require('request');
 
 /* GET users listing. */
-router.get('/:loc', function(req, res, next) {
+router.get('/hospital/:loc', function(req, res, next) {
     var currentLoc=req.params.loc;
+    var apiKey = "AIzaSyBKeZCRS8E9tvFg2bgQ4-f21KWcrxHVSy4";
 
-    /*
-    var url = "http://www.priceline.com/api/hotelretail/listing/v3/"+currentLoc+"/"+dateString+"/"+nextDateString+"/1/50?offset=0";
+    var url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+currentLoc+"&radius=500&types=hospital&key="+apiKey;
     var output = [];
 
     request(url, function(error, response, body) {
-        var data = JSON.parse(body).hotels;
+        var data = JSON.parse(body).results;
         //console.log(data.hotels);
 
-        for(var hotel in data){
-            var long = data[hotel].lon;
-            var lat = data[hotel].lat;
-            var name = data[hotel].hotelName;
+        for(var hos in data){
+            var long = data[hos].geometry.location.lng;
+            var lat = data[hos].geometry.location.lat;
+            var name = data[hos].name;
 
             output.push({'Name': name, 'Lat': lat, 'Lon': long});
         }
@@ -26,9 +26,6 @@ router.get('/:loc', function(req, res, next) {
         res.send(output);
         //console.log(body);
     });
-    */
-
-    res.send("test");
 });
 
 module.exports = router;
